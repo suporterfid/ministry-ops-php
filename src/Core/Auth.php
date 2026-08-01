@@ -64,6 +64,7 @@ class Auth {
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user['password_hash'])) {
+            session_regenerate_id(true);
             $_SESSION['user_id'] = $user['id'];
             
             // Set initial tenant context
@@ -122,5 +123,16 @@ class Auth {
 
     public static function currentTenantId(): ?string {
         return $_SESSION['tenant_id'] ?? null;
+    }
+
+    public static function csrfToken(): string {
+        if (empty($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+        return $_SESSION['csrf_token'];
+    }
+
+    public static function verifyCsrfToken(?string $token): bool {
+        return !empty($token) && !empty($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
     }
 }
