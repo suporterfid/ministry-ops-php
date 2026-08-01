@@ -51,8 +51,11 @@ $router->post('/admin/bulletin/create', ['AdminController', 'handleCreateBulleti
 
 $router->get('/admin/operations', ['AdminController', 'operations']);
 $router->post('/admin/operation/create', ['AdminController', 'handleCreateOperation']);
+$router->post('/admin/operation/delete', ['AdminController', 'handleDeleteOperation']);
 $router->post('/admin/event/create', ['AdminController', 'handleCreateEvent']);
+$router->post('/admin/event/delete', ['AdminController', 'handleDeleteEvent']);
 $router->post('/admin/shift/create', ['AdminController', 'handleCreateShift']);
+$router->post('/admin/shift/delete', ['AdminController', 'handleDeleteShift']);
 $router->post('/admin/assignment/create', ['AdminController', 'handleCreateAssignment']);
 $router->get('/admin/attendance', ['AdminController', 'attendance']);
 

@@ -210,4 +210,43 @@ class AdminController {
 
         Helpers::redirect('bulletins');
     }
+
+    public function handleDeleteOperation(): void {
+        $user = Auth::requireAdmin();
+        $tenantId = Auth::currentTenantId();
+        $operationId = $_POST['operation_id'] ?? '';
+
+        if ($tenantId && $operationId) {
+            AdminModel::deleteOperation($tenantId, $operationId);
+            Helpers::setFlash('success', 'Operação removida com sucesso.');
+        }
+
+        Helpers::redirect('admin/operations');
+    }
+
+    public function handleDeleteEvent(): void {
+        $user = Auth::requireAdmin();
+        $tenantId = Auth::currentTenantId();
+        $eventId = $_POST['event_id'] ?? '';
+
+        if ($tenantId && $eventId) {
+            AdminModel::deleteEventInstance($tenantId, $eventId);
+            Helpers::setFlash('success', 'Evento removido com sucesso.');
+        }
+
+        Helpers::redirect('admin/operations');
+    }
+
+    public function handleDeleteShift(): void {
+        $user = Auth::requireAdmin();
+        $tenantId = Auth::currentTenantId();
+        $shiftId = $_POST['shift_id'] ?? '';
+
+        if ($tenantId && $shiftId) {
+            AdminModel::deleteShift($tenantId, $shiftId);
+            Helpers::setFlash('success', 'Turno removido com sucesso.');
+        }
+
+        Helpers::redirect('admin/operations');
+    }
 }

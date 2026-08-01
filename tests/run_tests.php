@@ -189,6 +189,15 @@ try {
     $invalidDateCheck = strtotime('+2 days') > strtotime('+2 days + 3 hours');
     assertTest(!$invalidDateCheck, 'Date validation rejects end date prior to start date');
 
+    $delShiftOk = AdminModel::deleteShift($tenantId, $shiftId);
+    assertTest($delShiftOk, 'Admin deletes shift');
+
+    $delEventOk = AdminModel::deleteEventInstance($tenantId, $eventId);
+    assertTest($delEventOk, 'Admin deletes event instance');
+
+    $delOpOk = AdminModel::deleteOperation($tenantId, $opId);
+    assertTest($delOpOk, 'Admin deletes operation');
+
 } catch (Exception $e) {
     echo "\n[ERROR] Exception caught during tests: " . $e->getMessage() . "\n";
     $failed++;
