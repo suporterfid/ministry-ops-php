@@ -88,6 +88,8 @@ try {
     if ($reqId) {
         $approveOk = AdminModel::reviewJoinRequest($reqId, 'approve', $adminUser['id'], $tenantId);
         assertTest($approveOk, 'Admin approves tenant join request');
+        assertTest(AdminModel::isTenantMember($tenantId, $testUserId), 'Approved user has active tenant membership');
+        assertTest(!AdminModel::isTenantMember($tenantId, 'non-existent-user-id'), 'Non-member returns false for tenant membership');
     }
 
     // ---------------------------------------------------------

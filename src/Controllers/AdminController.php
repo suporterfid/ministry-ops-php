@@ -146,6 +146,11 @@ class AdminController {
         $instructions = $_POST['instructions'] ?? '';
 
         if ($tenantId && !empty($volunteerUserId) && !empty($startsAt) && !empty($endsAt)) {
+            if (!AdminModel::isTenantMember($tenantId, $volunteerUserId)) {
+                Helpers::setFlash('danger', 'O voluntário selecionado não possui vínculo ativo com esta organização.');
+                Helpers::redirect('admin/confirmations');
+            }
+
             AdminModel::createAssignment($tenantId, [
                 'volunteer_user_id' => $volunteerUserId,
                 'leader_user_id' => $user['id'],

@@ -247,6 +247,13 @@ class AdminModel {
         return $assignmentId;
     }
 
+    public static function isTenantMember(string $tenantId, string $userId): bool {
+        $db = Database::getConnection();
+        $stmt = $db->prepare("SELECT id FROM tenant_memberships WHERE tenant_id = ? AND user_id = ? AND status = 'active'");
+        $stmt->execute([$tenantId, $userId]);
+        return (bool)$stmt->fetch();
+    }
+
     public static function getAttendanceLogs(string $tenantId): array {
         $db = Database::getConnection();
         $stmt = $db->prepare("
