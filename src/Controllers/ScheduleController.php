@@ -23,6 +23,7 @@ class ScheduleController {
     }
 
     public function handleConfirm(): void {
+        Auth::requireCsrf();
         $user = Auth::requireAuth();
         $tenantId = Auth::currentTenantId();
         $assignmentId = $_POST['assignment_id'] ?? '';
@@ -43,6 +44,7 @@ class ScheduleController {
     }
 
     public function handleDecline(): void {
+        Auth::requireCsrf();
         $user = Auth::requireAuth();
         $tenantId = Auth::currentTenantId();
         $assignmentId = $_POST['assignment_id'] ?? '';

@@ -30,6 +30,7 @@ class AdminController {
     }
 
     public function handleReviewJoinRequest(): void {
+        Auth::requireCsrf();
         $user = Auth::requireAdmin();
         $tenantId = Auth::currentTenantId();
         $requestId = $_POST['request_id'] ?? '';
@@ -67,6 +68,7 @@ class AdminController {
     }
 
     public function handleCreateOperation(): void {
+        Auth::requireCsrf();
         $user = Auth::requireAdmin();
         $tenantId = Auth::currentTenantId();
         $name = $_POST['name'] ?? '';
@@ -83,6 +85,7 @@ class AdminController {
     }
 
     public function handleCreateEvent(): void {
+        Auth::requireCsrf();
         $user = Auth::requireAdmin();
         $tenantId = Auth::currentTenantId();
         $operationId = $_POST['operation_id'] ?? '';
@@ -108,6 +111,7 @@ class AdminController {
     }
 
     public function handleCreateShift(): void {
+        Auth::requireCsrf();
         $user = Auth::requireAdmin();
         $tenantId = Auth::currentTenantId();
         $eventInstanceId = $_POST['event_instance_id'] ?? '';
@@ -133,6 +137,7 @@ class AdminController {
     }
 
     public function handleCreateAssignment(): void {
+        Auth::requireCsrf();
         $user = Auth::requireAdmin();
         $tenantId = Auth::currentTenantId();
 
@@ -180,6 +185,7 @@ class AdminController {
     }
 
     public function handleApproveSwap(): void {
+        Auth::requireCsrf();
         $user = Auth::requireAdmin();
         $tenantId = Auth::currentTenantId();
         $swapRequestId = $_POST['swap_request_id'] ?? '';
@@ -196,6 +202,7 @@ class AdminController {
     }
 
     public function handleCreateBulletin(): void {
+        Auth::requireCsrf();
         $user = Auth::requireAdmin();
         $tenantId = Auth::currentTenantId();
         $title = $_POST['title'] ?? '';
@@ -212,6 +219,7 @@ class AdminController {
     }
 
     public function handleDeleteOperation(): void {
+        Auth::requireCsrf();
         $user = Auth::requireAdmin();
         $tenantId = Auth::currentTenantId();
         $operationId = $_POST['operation_id'] ?? '';
@@ -225,6 +233,7 @@ class AdminController {
     }
 
     public function handleDeleteEvent(): void {
+        Auth::requireCsrf();
         $user = Auth::requireAdmin();
         $tenantId = Auth::currentTenantId();
         $eventId = $_POST['event_id'] ?? '';
@@ -238,6 +247,7 @@ class AdminController {
     }
 
     public function handleDeleteShift(): void {
+        Auth::requireCsrf();
         $user = Auth::requireAdmin();
         $tenantId = Auth::currentTenantId();
         $shiftId = $_POST['shift_id'] ?? '';

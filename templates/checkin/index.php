@@ -26,6 +26,7 @@
 
             <!-- Hidden Checkin Form -->
             <form id="checkin-form" action="<?= Helpers::url('checkin') ?>" method="POST" style="display:none;">
+                <?= Helpers::csrfField() ?>
                 <input type="hidden" name="assignment_id" value="<?= Helpers::e($assignment['id']) ?>">
                 <input type="hidden" name="latitude" id="input-latitude">
                 <input type="hidden" name="longitude" id="input-longitude">
@@ -55,6 +56,7 @@
         </p>
 
         <form action="<?= Helpers::url('checkin') ?>" method="POST">
+            <?= Helpers::csrfField() ?>
             <input type="hidden" name="assignment_id" value="<?= Helpers::e($assignment['id']) ?>">
             <input type="hidden" name="latitude" value="-23.5505200">
             <input type="hidden" name="longitude" value="-46.6333080">

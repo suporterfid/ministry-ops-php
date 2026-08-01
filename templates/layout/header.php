@@ -20,6 +20,7 @@
     if (!empty($currentUser['memberships'])): 
     ?>
     <form action="<?= Helpers::url('tenant/select') ?>" method="POST" style="margin:0;">
+        <?= Helpers::csrfField() ?>
         <select name="tenant_id" class="header-tenant-selector" onchange="this.form.submit()">
             <?php foreach ($currentUser['memberships'] as $m): ?>
                 <option value="<?= Helpers::e($m['tenant_id']) ?>" <?= $m['tenant_id'] === $currentUser['current_tenant_id'] ? 'selected' : '' ?>>

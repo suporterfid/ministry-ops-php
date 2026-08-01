@@ -30,6 +30,7 @@
                 </div>
             <?php else: ?>
                 <form action="<?= Helpers::url('swaps/cover') ?>" method="POST">
+                    <?= Helpers::csrfField() ?>
                     <input type="hidden" name="swap_request_id" value="<?= Helpers::e($sw['id']) ?>">
                     <button type="submit" class="btn btn-primary">
                         🤝 Me oferecer para cobrir esta escala

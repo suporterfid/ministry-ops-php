@@ -33,6 +33,7 @@
 
             <?php if (empty($b['acknowledged_at'])): ?>
                 <form action="<?= Helpers::url('bulletins/acknowledge') ?>" method="POST">
+                    <?= Helpers::csrfField() ?>
                     <input type="hidden" name="bulletin_id" value="<?= Helpers::e($b['id']) ?>">
                     <button type="submit" class="btn btn-secondary btn-sm">
                         ✓ Marcar como Lido
@@ -52,6 +53,7 @@
     <div class="card" style="width:100%; max-width:500px; margin:0;">
         <h3 style="color:#fff; font-size:1.1rem; margin-bottom:1rem;">Publicar Novo Boletim</h3>
         <form action="<?= Helpers::url('admin/bulletin/create') ?>" method="POST">
+            <?= Helpers::csrfField() ?>
             <div class="form-group">
                 <label class="form-label">Título do Comunicado</label>
                 <input type="text" name="title" class="form-control" placeholder="ex: Reunião Geral de Voluntários" required>

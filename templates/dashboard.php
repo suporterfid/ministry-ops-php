@@ -48,6 +48,7 @@
         <div class="btn-group" style="margin-top: 1rem;">
             <?php if ($nextAssignment['status'] === 'pending_confirmation'): ?>
                 <form action="<?= Helpers::url('schedule/confirm') ?>" method="POST" style="flex:1;">
+                    <?= Helpers::csrfField() ?>
                     <input type="hidden" name="assignment_id" value="<?= Helpers::e($nextAssignment['id']) ?>">
                     <button type="submit" class="btn btn-primary" style="width:100%;">Confirmar Presença</button>
                 </form>

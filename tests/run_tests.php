@@ -4,6 +4,7 @@
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../src/Core/Helpers.php';
+require_once __DIR__ . '/../src/Core/Auth.php';
 require_once __DIR__ . '/../src/Models/User.php';
 require_once __DIR__ . '/../src/Models/Tenant.php';
 require_once __DIR__ . '/../src/Models/Assignment.php';
@@ -61,6 +62,11 @@ try {
     assertTest($adminUser !== null, 'Admin user lookup by email');
     assertTest($volunteerUser !== null, 'Volunteer user lookup by email');
     assertTest(User::findByEmail('nonexistent@test.com') === null, 'Lookup for non-existent user returns null');
+
+    $csrfToken = Auth::csrfToken();
+    assertTest(!empty($csrfToken) && strlen($csrfToken) === 64, 'Generate 64-char hex CSRF token');
+    assertTest(Auth::verifyCsrfToken($csrfToken), 'Valid CSRF token passes verification');
+    assertTest(!Auth::verifyCsrfToken('invalid-token-string'), 'Invalid CSRF token fails verification');
 
     // ---------------------------------------------------------
     // TEST 2: Tenant & Join Requests

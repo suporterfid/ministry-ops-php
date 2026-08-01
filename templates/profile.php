@@ -13,6 +13,7 @@
         </div>
 
         <form action="<?= Helpers::url('profile/update') ?>" method="POST">
+            <?= Helpers::csrfField() ?>
             <div class="form-group">
                 <label class="form-label">E-mail</label>
                 <input type="email" class="form-control" value="<?= Helpers::e($user['email']) ?>" disabled style="opacity: 0.6;">
@@ -37,6 +38,7 @@
             </a>
 
             <form action="<?= Helpers::url('logout') ?>" method="POST">
+                <?= Helpers::csrfField() ?>
                 <button type="submit" class="btn btn-danger btn-sm" style="width: 100%;">
                     Sair da Conta (Logout)
                 </button>

@@ -135,4 +135,12 @@ class Auth {
     public static function verifyCsrfToken(?string $token): bool {
         return !empty($token) && !empty($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
     }
+
+    public static function requireCsrf(): void {
+        $token = $_POST['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? null;
+        if (!self::verifyCsrfToken($token)) {
+            Helpers::setFlash('danger', 'Sessão expirada ou token de segurança inválido. Tente novamente.');
+            Helpers::redirect('dashboard');
+        }
+    }
 }
