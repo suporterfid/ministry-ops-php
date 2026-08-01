@@ -1,0 +1,21 @@
+# Ministry Ops PHP - Apache Rewrite Rules for Shared Hosting (cPanel / Hostinger)
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Prevent directory listing
+    Options -Indexes
+
+    # Pass Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Allow direct access to public static files (CSS, JS, images)
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Route all other requests to index.php
+    RewriteRule ^(.*)$ index.php?route=$1 [QSA,L]
+</IfModule>
