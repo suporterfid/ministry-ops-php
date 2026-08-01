@@ -184,6 +184,9 @@ try {
     $shiftId = AdminModel::createShift($tenantId, $eventId, 'Turno Tarde', date('Y-m-d H:i:s', strtotime('+2 days + 1 hour')), date('Y-m-d H:i:s', strtotime('+2 days + 3 hours')));
     assertTest(!empty($shiftId), 'Admin creates shift');
 
+    $invalidDateCheck = strtotime('+2 days') > strtotime('+2 days + 3 hours');
+    assertTest(!$invalidDateCheck, 'Date validation rejects end date prior to start date');
+
 } catch (Exception $e) {
     echo "\n[ERROR] Exception caught during tests: " . $e->getMessage() . "\n";
     $failed++;

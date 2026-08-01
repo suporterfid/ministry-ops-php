@@ -91,6 +91,13 @@ class AdminController {
         $locationName = $_POST['location_name'] ?? '';
 
         if ($tenantId && !empty($operationId) && !empty($startsAt) && !empty($endsAt)) {
+            $startTime = strtotime($startsAt);
+            $endTime = strtotime($endsAt);
+            if (!$startTime || !$endTime || $endTime <= $startTime) {
+                Helpers::setFlash('danger', 'A data/horário de término deve ser posterior à data/horário de início.');
+                Helpers::redirect('admin/operations');
+            }
+
             AdminModel::createEventInstance($tenantId, $operationId, $startsAt, $endsAt, $locationName);
             Helpers::setFlash('success', 'Evento/Instância cadastrado com sucesso!');
         } else {
@@ -108,7 +115,14 @@ class AdminController {
         $startsAt = $_POST['starts_at'] ?? '';
         $endsAt = $_POST['ends_at'] ?? '';
 
-        if ($tenantId && !empty($eventInstanceId) && !empty($name)) {
+        if ($tenantId && !empty($eventInstanceId) && !empty($name) && !empty($startsAt) && !empty($endsAt)) {
+            $startTime = strtotime($startsAt);
+            $endTime = strtotime($endsAt);
+            if (!$startTime || !$endTime || $endTime <= $startTime) {
+                Helpers::setFlash('danger', 'A data/horário de término do turno deve ser posterior ao início.');
+                Helpers::redirect('admin/operations');
+            }
+
             AdminModel::createShift($tenantId, $eventInstanceId, $name, $startsAt, $endsAt);
             Helpers::setFlash('success', 'Turno cadastrado com sucesso!');
         } else {
