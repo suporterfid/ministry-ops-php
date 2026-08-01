@@ -48,6 +48,12 @@ class Router {
 
         // 404 Not Found fallback
         http_response_code(404);
+
+        // Don't flash warning or redirect for favicon / static assets missing requests
+        if ($route === '/favicon.ico' || preg_match('/\.(ico|png|jpg|jpeg|svg|css|js|map)$/i', $route)) {
+            exit;
+        }
+
         require_once __DIR__ . '/Helpers.php';
         Helpers::setFlash('warning', 'Página não encontrada.');
         Helpers::redirect('dashboard');
