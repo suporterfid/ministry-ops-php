@@ -52,6 +52,7 @@
 
                 <?php if ($sw['status'] === 'pending_approval'): ?>
                     <form action="<?= Helpers::url('admin/swap/approve') ?>" method="POST" style="margin-top:0.5rem;">
+                        <?= Helpers::csrfField() ?>
                         <input type="hidden" name="swap_request_id" value="<?= Helpers::e($sw['id']) ?>">
                         <button type="submit" class="btn btn-success btn-sm">
                             ✓ Aprovar Troca e Reatribuir Voluntário
@@ -85,11 +86,13 @@
 
                     <div class="btn-group" style="width: auto;">
                         <form action="<?= Helpers::url('admin/join-request/review') ?>" method="POST" style="margin:0;">
+                            <?= Helpers::csrfField() ?>
                             <input type="hidden" name="request_id" value="<?= Helpers::e($req['id']) ?>">
                             <input type="hidden" name="action" value="approve">
                             <button type="submit" class="btn btn-success btn-sm">Aprovar</button>
                         </form>
                         <form action="<?= Helpers::url('admin/join-request/review') ?>" method="POST" style="margin:0;">
+                            <?= Helpers::csrfField() ?>
                             <input type="hidden" name="request_id" value="<?= Helpers::e($req['id']) ?>">
                             <input type="hidden" name="action" value="reject">
                             <button type="submit" class="btn btn-danger btn-sm">Recusar</button>

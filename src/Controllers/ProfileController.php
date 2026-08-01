@@ -12,6 +12,7 @@ class ProfileController {
     }
 
     public function handleUpdate(): void {
+        Auth::requireCsrf();
         $user = Auth::requireAuth();
         $fullName = $_POST['full_name'] ?? '';
         $phone = $_POST['phone'] ?? '';

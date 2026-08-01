@@ -15,6 +15,7 @@ class AuthController {
     }
 
     public function handleLogin(): void {
+        Auth::requireCsrf();
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
 
@@ -45,6 +46,7 @@ class AuthController {
     }
 
     public function handleRegister(): void {
+        Auth::requireCsrf();
         $fullName = $_POST['full_name'] ?? '';
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
@@ -83,6 +85,7 @@ class AuthController {
     }
 
     public function handleJoinTenant(): void {
+        Auth::requireCsrf();
         $user = Auth::requireAuth();
         $code = $_POST['tenant_code'] ?? '';
         $message = $_POST['message'] ?? '';
@@ -104,6 +107,7 @@ class AuthController {
     }
 
     public function handleSelectTenant(): void {
+        Auth::requireCsrf();
         $user = Auth::requireAuth();
         $tenantId = $_POST['tenant_id'] ?? '';
         if (!empty($tenantId)) {
@@ -114,6 +118,7 @@ class AuthController {
     }
 
     public function handleLogout(): void {
+        Auth::requireCsrf();
         Auth::logout();
         Helpers::setFlash('info', 'Você saiu da sua conta.');
         Helpers::redirect('login');

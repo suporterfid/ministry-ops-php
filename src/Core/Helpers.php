@@ -32,6 +32,10 @@ class Helpers {
         return htmlspecialchars($string ?? '', ENT_QUOTES, 'UTF-8');
     }
 
+    public static function csrfField(): string {
+        return '<input type="hidden" name="csrf_token" value="' . self::e(Auth::csrfToken()) . '">';
+    }
+
     public static function generateUuid(): string {
         return sprintf(
             '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',

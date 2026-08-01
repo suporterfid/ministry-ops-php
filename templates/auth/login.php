@@ -9,6 +9,7 @@
         </div>
 
         <form action="<?= Helpers::url('login') ?>" method="POST">
+            <?= Helpers::csrfField() ?>
             <div class="form-group">
                 <label class="form-label" for="email">E-mail</label>
                 <input type="email" name="email" id="email" class="form-control" placeholder="seu.email@igreja.org" required autofocus>

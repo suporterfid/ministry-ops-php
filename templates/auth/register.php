@@ -8,6 +8,7 @@
         </div>
 
         <form action="<?= Helpers::url('register') ?>" method="POST">
+            <?= Helpers::csrfField() ?>
             <div class="form-group">
                 <label class="form-label" for="full_name">Nome Completo</label>
                 <input type="text" name="full_name" id="full_name" class="form-control" placeholder="João da Silva" required>

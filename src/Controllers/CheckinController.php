@@ -28,6 +28,7 @@ class CheckinController {
     }
 
     public function handleCheckin(): void {
+        Auth::requireCsrf();
         $user = Auth::requireAuth();
         $tenantId = Auth::currentTenantId();
         

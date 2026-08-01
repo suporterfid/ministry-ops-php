@@ -8,6 +8,7 @@
         </div>
 
         <form action="<?= Helpers::url('tenant/join') ?>" method="POST">
+            <?= Helpers::csrfField() ?>
             <div class="form-group">
                 <label class="form-label" for="tenant_code">Código da Igreja / Tenant</label>
                 <input type="text" name="tenant_code" id="tenant_code" class="form-control" placeholder="MATRIZ" style="text-transform: uppercase;" required autofocus>

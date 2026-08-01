@@ -24,6 +24,7 @@
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
                             <span class="badge badge-confirmed"><?= Helpers::e($op['status']) ?></span>
                             <form action="<?= Helpers::url('admin/operation/delete') ?>" method="POST" onsubmit="return confirm('Deseja realmente excluir esta operação?');" style="margin:0;">
+                                <?= Helpers::csrfField() ?>
                                 <input type="hidden" name="operation_id" value="<?= Helpers::e($op['id']) ?>">
                                 <button type="submit" class="btn btn-danger btn-sm" style="padding: 2px 8px; font-size: 0.75rem;">Excluir</button>
                             </form>
@@ -59,6 +60,7 @@
                         </div>
                     </div>
                     <form action="<?= Helpers::url('admin/event/delete') ?>" method="POST" onsubmit="return confirm('Deseja realmente excluir este evento?');" style="margin:0;">
+                        <?= Helpers::csrfField() ?>
                         <input type="hidden" name="event_id" value="<?= Helpers::e($ev['id']) ?>">
                         <button type="submit" class="btn btn-danger btn-sm" style="padding: 2px 8px; font-size: 0.75rem;">Excluir</button>
                     </form>
@@ -75,6 +77,7 @@
     <div class="card" style="width:100%; max-width:450px; margin:0;">
         <h3 style="color:#fff; font-size:1.1rem; margin-bottom:1rem;">Cadastrar Nova Operação</h3>
         <form action="<?= Helpers::url('admin/operation/create') ?>" method="POST">
+            <?= Helpers::csrfField() ?>
             <div class="form-group">
                 <label class="form-label">Nome da Operação</label>
                 <input type="text" name="name" class="form-control" placeholder="ex: Culto de Domingo Manhã" required>
@@ -98,6 +101,7 @@
     <div class="card" style="width:100%; max-width:450px; margin:0;">
         <h3 style="color:#fff; font-size:1.1rem; margin-bottom:1rem;">Cadastrar Instância de Evento</h3>
         <form action="<?= Helpers::url('admin/event/create') ?>" method="POST">
+            <?= Helpers::csrfField() ?>
             <div class="form-group">
                 <label class="form-label">Operação</label>
                 <select name="operation_id" class="form-control" required>

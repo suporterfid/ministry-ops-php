@@ -19,6 +19,7 @@ class BulletinsController {
     }
 
     public function handleAcknowledge(): void {
+        Auth::requireCsrf();
         $user = Auth::requireAuth();
         $tenantId = Auth::currentTenantId();
         $bulletinId = $_POST['bulletin_id'] ?? '';

@@ -23,6 +23,7 @@ class SwapsController {
     }
 
     public function handleCreateRequest(): void {
+        Auth::requireCsrf();
         $user = Auth::requireAuth();
         $tenantId = Auth::currentTenantId();
         $assignmentId = $_POST['assignment_id'] ?? '';
@@ -43,6 +44,7 @@ class SwapsController {
     }
 
     public function handleCoverOffer(): void {
+        Auth::requireCsrf();
         $user = Auth::requireAuth();
         $tenantId = Auth::currentTenantId();
         $swapRequestId = $_POST['swap_request_id'] ?? '';

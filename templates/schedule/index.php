@@ -34,6 +34,7 @@
             <div class="btn-group">
                 <?php if ($as['status'] === 'pending_confirmation'): ?>
                     <form action="<?= Helpers::url('schedule/confirm') ?>" method="POST" style="flex:1;">
+                        <?= Helpers::csrfField() ?>
                         <input type="hidden" name="assignment_id" value="<?= Helpers::e($as['id']) ?>">
                         <button type="submit" class="btn btn-primary" style="width:100%;">Confirmar Presença</button>
                     </form>
@@ -56,6 +57,7 @@
             <div class="card" style="width:100%; max-width:400px; margin:0;">
                 <h3 style="color:#fff; font-size:1.1rem; margin-bottom:1rem;">Recusar Escala</h3>
                 <form action="<?= Helpers::url('schedule/decline') ?>" method="POST">
+                    <?= Helpers::csrfField() ?>
                     <input type="hidden" name="assignment_id" value="<?= Helpers::e($as['id']) ?>">
                     
                     <div class="form-group">
@@ -86,6 +88,7 @@
             <div class="card" style="width:100%; max-width:400px; margin:0;">
                 <h3 style="color:#fff; font-size:1.1rem; margin-bottom:1rem;">Solicitar Troca de Escala</h3>
                 <form action="<?= Helpers::url('swaps/create') ?>" method="POST">
+                    <?= Helpers::csrfField() ?>
                     <input type="hidden" name="assignment_id" value="<?= Helpers::e($as['id']) ?>">
                     
                     <div class="form-group">
