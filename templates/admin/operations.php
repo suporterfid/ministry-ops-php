@@ -21,7 +21,13 @@
                 <div style="padding: 0.85rem 1rem; background: var(--bg-dark); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <strong style="color: #fff; font-size: 1rem;"><?= Helpers::e($op['name']) ?></strong>
-                        <span class="badge badge-confirmed"><?= Helpers::e($op['status']) ?></span>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="badge badge-confirmed"><?= Helpers::e($op['status']) ?></span>
+                            <form action="<?= Helpers::url('admin/operation/delete') ?>" method="POST" onsubmit="return confirm('Deseja realmente excluir esta operação?');" style="margin:0;">
+                                <input type="hidden" name="operation_id" value="<?= Helpers::e($op['id']) ?>">
+                                <button type="submit" class="btn btn-danger btn-sm" style="padding: 2px 8px; font-size: 0.75rem;">Excluir</button>
+                            </form>
+                        </div>
                     </div>
                     <?php if (!empty($op['description'])): ?>
                         <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;"><?= Helpers::e($op['description']) ?></p>
@@ -44,12 +50,18 @@
     <?php if (!empty($events)): ?>
         <div style="display: flex; flex-direction: column; gap: 0.75rem;">
             <?php foreach ($events as $ev): ?>
-                <div style="padding: 0.85rem 1rem; background: var(--bg-dark); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-                    <strong style="color: #fff; font-size: 0.95rem;"><?= Helpers::e($ev['operation_name']) ?></strong>
-                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">
-                        📅 Data: <?= Helpers::formatDate($ev['starts_at'], 'd/m/Y H:i') ?> - <?= Helpers::formatDate($ev['ends_at'], 'H:i') ?>
-                        <?= !empty($ev['location_name']) ? ' | 📍 ' . Helpers::e($ev['location_name']) : '' ?>
+                <div style="padding: 0.85rem 1rem; background: var(--bg-dark); border-radius: var(--radius-sm); border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong style="color: #fff; font-size: 0.95rem;"><?= Helpers::e($ev['operation_name']) ?></strong>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">
+                            📅 Data: <?= Helpers::formatDate($ev['starts_at'], 'd/m/Y H:i') ?> - <?= Helpers::formatDate($ev['ends_at'], 'H:i') ?>
+                            <?= !empty($ev['location_name']) ? ' | 📍 ' . Helpers::e($ev['location_name']) : '' ?>
+                        </div>
                     </div>
+                    <form action="<?= Helpers::url('admin/event/delete') ?>" method="POST" onsubmit="return confirm('Deseja realmente excluir este evento?');" style="margin:0;">
+                        <input type="hidden" name="event_id" value="<?= Helpers::e($ev['id']) ?>">
+                        <button type="submit" class="btn btn-danger btn-sm" style="padding: 2px 8px; font-size: 0.75rem;">Excluir</button>
+                    </form>
                 </div>
             <?php endforeach; ?>
         </div>

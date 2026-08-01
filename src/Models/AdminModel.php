@@ -275,4 +275,22 @@ class AdminModel {
         $stmt->execute([$tenantId]);
         return $stmt->fetchAll();
     }
+
+    public static function deleteOperation(string $tenantId, string $operationId): bool {
+        $db = Database::getConnection();
+        $stmt = $db->prepare("DELETE FROM operations WHERE id = ? AND tenant_id = ?");
+        return $stmt->execute([$operationId, $tenantId]);
+    }
+
+    public static function deleteEventInstance(string $tenantId, string $eventId): bool {
+        $db = Database::getConnection();
+        $stmt = $db->prepare("DELETE FROM event_instances WHERE id = ? AND tenant_id = ?");
+        return $stmt->execute([$eventId, $tenantId]);
+    }
+
+    public static function deleteShift(string $tenantId, string $shiftId): bool {
+        $db = Database::getConnection();
+        $stmt = $db->prepare("DELETE FROM shifts WHERE id = ? AND tenant_id = ?");
+        return $stmt->execute([$shiftId, $tenantId]);
+    }
 }
