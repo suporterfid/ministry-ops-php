@@ -290,6 +290,9 @@ class AdminModel {
 
     public static function deleteShift(string $tenantId, string $shiftId): bool {
         $db = Database::getConnection();
+        $stmtDelAssignments = $db->prepare("DELETE FROM assignments WHERE shift_id = ? AND tenant_id = ?");
+        $stmtDelAssignments->execute([$shiftId, $tenantId]);
+
         $stmt = $db->prepare("DELETE FROM shifts WHERE id = ? AND tenant_id = ?");
         return $stmt->execute([$shiftId, $tenantId]);
     }

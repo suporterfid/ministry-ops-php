@@ -51,19 +51,115 @@
     <?php if (!empty($events)): ?>
         <div style="display: flex; flex-direction: column; gap: 0.75rem;">
             <?php foreach ($events as $ev): ?>
-                <div style="padding: 0.85rem 1rem; background: var(--bg-dark); border-radius: var(--radius-sm); border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <strong style="color: #fff; font-size: 0.95rem;"><?= Helpers::e($ev['operation_name']) ?></strong>
-                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">
-                            📅 Data: <?= Helpers::formatDate($ev['starts_at'], 'd/m/Y H:i') ?> - <?= Helpers::formatDate($ev['ends_at'], 'H:i') ?>
-                            <?= !empty($ev['location_name']) ? ' | 📍 ' . Helpers::e($ev['location_name']) : '' ?>
+                <?php $eventShifts = array_filter($shifts, fn($s) => ($s['event_instance_id'] ?? '') === $ev['id']); ?>
+                <div style="padding: 0.85rem 1rem; background: var(--bg-dark); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong style="color: #fff; font-size: 0.95rem;"><?= Helpers::e($ev['operation_name']) ?></strong>
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">
+                                📅 Data: <?= Helpers::formatDate($ev['starts_at'], 'd/m/Y H:i') ?> - <?= Helpers::formatDate($ev['ends_at'], 'H:i') ?>
+                                <?= !empty($ev['location_name']) ? ' | 📍 ' . Helpers::e($ev['location_name']) : '' ?>
+                            </div>
                         </div>
+                        <form action="<?= Helpers::url('admin/event/delete') ?>" method="POST" onsubmit="return confirm('Deseja realmente excluir este evento?');" style="margin:0;">
+                            <?= Helpers::csrfField() ?>
+                            <input type="hidden" name="event_id" value="<?= Helpers::e($ev['id']) ?>">
+                            <button type="submit" class="btn btn-danger btn-sm" style="padding: 2px 8px; font-size: 0.75rem;">Excluir</button>
+                        </form>
                     </div>
-                    <form action="<?= Helpers::url('admin/event/delete') ?>" method="POST" onsubmit="return confirm('Deseja realmente excluir este evento?');" style="margin:0;">
-                        <?= Helpers::csrfField() ?>
-                        <input type="hidden" name="event_id" value="<?= Helpers::e($ev['id']) ?>">
-                        <button type="submit" class="btn btn-danger btn-sm" style="padding: 2px 8px; font-size: 0.75rem;">Excluir</button>
-                    </form>
+
+                    <!-- Shifts for this event -->
+                    <div style="margin-top: 0.6rem;">
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.35rem;">Turnos do evento (<?= count($eventShifts) ?>)</div>
+                        <?php if (!empty($eventShifts)): ?>
+                            <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                                <?php foreach ($eventShifts as $sh): ?>
+                                    <div style="padding: 0.5rem 0.65rem; background: var(--bg); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;">
+                                            <div style="font-size: 0.82rem;">
+                                                <strong style="color: #fff;"><?= Helpers::e($sh['name']) ?></strong>
+                                                <div style="color: var(--text-muted); font-size: 0.75rem;">🕒 <?= Helpers::formatDate($sh['starts_at'], 'd/m/Y H:i') ?> - <?= Helpers::formatDate($sh['ends_at'], 'H:i') ?></div>
+                                            </div>
+                                            <form action="<?= Helpers::url('admin/shift/delete') ?>" method="POST" onsubmit="return confirm('Deseja excluir este turno e suas escalas?');" style="margin:0;">
+                                                <?= Helpers::csrfField() ?>
+                                                <input type="hidden" name="shift_id" value="<?= Helpers::e($sh['id']) ?>">
+                                                <button type="submit" class="btn btn-danger btn-sm" style="padding: 2px 8px; font-size: 0.75rem;">Excluir</button>
+                                            </form>
+                                        </div>
+
+                                        <!-- Assignment form for this shift -->
+                                        <?php if (!empty($roles) && !empty($members)): ?>
+                                            <details style="margin-top: 0.4rem;">
+                                                <summary style="cursor: pointer; color: var(--accent); font-size: 0.8rem;">+ Escalar voluntário</summary>
+                                                <form action="<?= Helpers::url('admin/assignment/create') ?>" method="POST" style="margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                                                    <?= Helpers::csrfField() ?>
+                                                    <input type="hidden" name="operation_id" value="<?= Helpers::e($ev['operation_id']) ?>">
+                                                    <input type="hidden" name="event_instance_id" value="<?= Helpers::e($ev['id']) ?>">
+                                                    <input type="hidden" name="shift_id" value="<?= Helpers::e($sh['id']) ?>">
+                                                    <input type="hidden" name="starts_at" value="<?= Helpers::e($sh['starts_at']) ?>">
+                                                    <input type="hidden" name="ends_at" value="<?= Helpers::e($sh['ends_at']) ?>">
+
+                                                    <div class="form-group" style="margin:0;">
+                                                        <label class="form-label">Voluntário</label>
+                                                        <select name="volunteer_user_id" class="form-control" required>
+                                                            <option value="">Selecione...</option>
+                                                            <?php foreach ($members as $member): ?>
+                                                                <option value="<?= Helpers::e($member['user_id']) ?>"><?= Helpers::e($member['full_name'] ?? $member['email']) ?></option>
+                                                            <?php endforeach; ?>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="form-group" style="margin:0;">
+                                                        <label class="form-label">Função</label>
+                                                        <select name="required_role_id" class="form-control">
+                                                            <option value="">Selecione...</option>
+                                                            <?php foreach ($roles as $role): ?>
+                                                                <option value="<?= Helpers::e($role['id']) ?>"><?= Helpers::e($role['name']) ?></option>
+                                                            <?php endforeach; ?>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="btn-group" style="margin:0;">
+                                                        <button type="submit" class="btn btn-primary btn-sm">Escalar</button>
+                                                    </div>
+                                                </form>
+                                            </details>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php else: ?>
+                            <p style="color: var(--text-muted); font-size: 0.8rem;">Sem turnos cadastrados para este evento.</p>
+                        <?php endif; ?>
+
+                        <!-- Create shift form -->
+                        <details style="margin-top: 0.5rem;">
+                            <summary style="cursor: pointer; color: var(--accent); font-size: 0.8rem;">+ Criar turno</summary>
+                            <form action="<?= Helpers::url('admin/shift/create') ?>" method="POST" style="margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                                <?= Helpers::csrfField() ?>
+                                <input type="hidden" name="event_instance_id" value="<?= Helpers::e($ev['id']) ?>">
+
+                                <div class="form-group" style="margin:0;">
+                                    <label class="form-label">Nome do Turno</label>
+                                    <input type="text" name="name" class="form-control" placeholder="ex: Turno da Manhã" required>
+                                </div>
+
+                                <div class="form-group" style="margin:0;">
+                                    <label class="form-label">Início</label>
+                                    <input type="datetime-local" name="starts_at" class="form-control" required>
+                                </div>
+
+                                <div class="form-group" style="margin:0;">
+                                    <label class="form-label">Fim</label>
+                                    <input type="datetime-local" name="ends_at" class="form-control" required>
+                                </div>
+
+                                <div class="btn-group" style="margin:0;">
+                                    <button type="submit" class="btn btn-primary btn-sm">Salvar Turno</button>
+                                </div>
+                            </form>
+                        </details>
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>
