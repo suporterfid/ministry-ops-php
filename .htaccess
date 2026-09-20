@@ -11,6 +11,9 @@
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
+    # Deny web access to sensitive/private directories
+    RewriteRule ^(sql|tests|config|docs|scripts|node_modules)(/|$) - [F,L]
+
     # Allow direct access to public static files (CSS, JS, images)
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d
