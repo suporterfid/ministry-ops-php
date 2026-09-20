@@ -1,6 +1,11 @@
 <?php
 // Comprehensive Integration Test Suite for Ministry Ops PHP
 
+if (php_sapi_name() !== 'cli') {
+    http_response_code(403);
+    exit('403 Forbidden');
+}
+
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../src/Core/Helpers.php';
