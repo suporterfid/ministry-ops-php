@@ -197,11 +197,46 @@ try {
     $shiftId = AdminModel::createShift($tenantId, $eventId, 'Turno Tarde', date('Y-m-d H:i:s', strtotime('+2 days + 1 hour')), date('Y-m-d H:i:s', strtotime('+2 days + 3 hours')));
     assertTest(!empty($shiftId), 'Admin creates shift');
 
+    $shiftList = AdminModel::getShifts($tenantId);
+    $shiftListed = false;
+    foreach ($shiftList as $sl) {
+        if ($sl['id'] === $shiftId && ($sl['event_instance_id'] ?? '') === $eventId) $shiftListed = true;
+    }
+    assertTest($shiftListed, 'Shift appears in getShifts grouped by event');
+
+    $roles = AdminModel::getRoles($tenantId);
+    assertTest(!empty($roles), 'Admin lists roles for assignment');
+
+    $members = AdminModel::getMembers($tenantId);
+    assertTest(!empty($members), 'Admin lists members for assignment');
+
     $invalidDateCheck = strtotime('+2 days') > strtotime('+2 days + 3 hours');
     assertTest(!$invalidDateCheck, 'Date validation rejects end date prior to start date');
 
+    $assignmentId = AdminModel::createAssignment($tenantId, [
+        'operation_id' => $opId,
+        'event_instance_id' => $eventId,
+        'shift_id' => $shiftId,
+        'required_role_id' => $roles[0]['id'] ?? null,
+        'volunteer_user_id' => $volunteerUser['id'],
+        'starts_at' => date('Y-m-d H:i:s', strtotime('+2 days + 2 hours')),
+        'ends_at' => date('Y-m-d H:i:s', strtotime('+2 days + 3 hours'))
+    ]);
+    assertTest(!empty($assignmentId), 'Admin creates assignment for shift');
+
+    $createdAssignment = Assignment::findById($assignmentId, $tenantId);
+    assertTest($createdAssignment !== null && $createdAssignment['shift_id'] === $shiftId, 'Assignment references the created shift');
+
+    $volunteerUpcoming = Assignment::getForUser($volunteerUser['id'], $tenantId, 'upcoming');
+    $visibleToVolunteer = false;
+    foreach ($volunteerUpcoming as $va) {
+        if ($va['id'] === $assignmentId) $visibleToVolunteer = true;
+    }
+    assertTest($visibleToVolunteer, 'Assignment appears in volunteer upcoming dashboard');
+
     $delShiftOk = AdminModel::deleteShift($tenantId, $shiftId);
     assertTest($delShiftOk, 'Admin deletes shift');
+    assertTest(Assignment::findById($assignmentId, $tenantId) === null, 'Deleting shift removes its assignments');
 
     $delEventOk = AdminModel::deleteEventInstance($tenantId, $eventId);
     assertTest($delEventOk, 'Admin deletes event instance');

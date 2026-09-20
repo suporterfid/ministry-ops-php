@@ -63,6 +63,8 @@ class AdminController {
         $operations = AdminModel::getOperations($tenantId ?? '');
         $events = AdminModel::getEventInstances($tenantId ?? '');
         $shifts = AdminModel::getShifts($tenantId ?? '');
+        $roles = AdminModel::getRoles($tenantId ?? '');
+        $members = AdminModel::getMembers($tenantId ?? '');
 
         require __DIR__ . '/../../templates/admin/operations.php';
     }
